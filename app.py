@@ -130,7 +130,7 @@ st.write(df[['text', 'textblob_label', 'vader_label']].head(10))
 
 
 
-from transformers import pipeline
+'''from transformers import pipeline
 
 roberta_sentiment = pipeline(
     "sentiment-analysis",
@@ -157,7 +157,7 @@ def get_roberta_label(text):
 df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
 
 # Affichage des premières lignes du DataFrame pour vérifier le résultat
-st.write(df.head())
+st.write(df.head())'''
 
 
 
