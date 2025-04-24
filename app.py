@@ -53,3 +53,14 @@ st.title("Analyse des Sentiments des Tweets")
 
 df = pd.read_csv('Tweet_clean.csv')
 df['clean_text'] = df['text'].apply(clean_text_for_sentiment)
+
+# Affichage des résultats
+st.subheader("Aperçu des données nettoyées")
+st.write(df[['text', 'clean_text']].head())
+
+# Enregistrer le fichier nettoyé
+df.to_csv('tweets_cleaned_text.csv', index=False)
+
+# Affichage des premiers tweets nettoyés
+st.subheader("Tweets nettoyés")
+st.write(df['clean_text'].iloc[1:10])
