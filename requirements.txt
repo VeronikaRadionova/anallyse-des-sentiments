@@ -1,5 +1,6 @@
 streamlit
 pandas
+nltk
 matplotlib
 pyplot
-nltk
+
