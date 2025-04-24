@@ -117,15 +117,15 @@ df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
 
 
 # Affichage des résultats dans Streamlit
-st.subheader("Aperçu des données analysées")
-st.write(df[['text', 'clean_text', 'textblob_polarity', 'textblob_label', 'vader_compound', 'vader_label']].head())
+#st.subheader("Aperçu des données analysées")
+#st.write(df[['text', 'clean_text', 'textblob_polarity', 'textblob_label', 'vader_compound', 'vader_label']].head())
 
 # Enregistrer le fichier nettoyé avec les analyses de sentiment
-df.to_csv('tweets_with_sentiments.csv', index=False)
+#df.to_csv('tweets_with_sentiments.csv', index=False)
 
 # Affichage des premiers tweets avec leurs sentiments
-st.subheader("Tweets avec Sentiments")
-st.write(df[['text', 'textblob_label', 'vader_label']].head(10))
+#st.subheader("Tweets avec Sentiments")
+#st.write(df[['text', 'textblob_label', 'vader_label']].head(10))
 
 
 
@@ -154,11 +154,16 @@ def get_roberta_label(text):
     except:
         return 'neutral'  # fallback en cas d'erreur
 
-'''# Application de la fonction à la colonne 'clean_text' du DataFrame
-df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
 
-# Affichage des premières lignes du DataFrame pour vérifier le résultat
-st.write(df.head())'''
+# Affichage des résultats dans Streamlit
+st.subheader("Aperçu des données analysées")
+st.write(df[['text', 'clean_text', 'textblob_polarity', 'textblob_label', 
+            'vader_compound', 'vader_label', 'roberta_label']].head())
 
+# Enregistrer le fichier nettoyé avec les analyses de sentiment
+df.to_csv('tweets_with_sentiments.csv', index=False)
 
+# Affichage des premiers tweets avec leurs sentiments
+st.subheader("Tweets avec Sentiments")
+st.write(df[['text', 'textblob_label', 'vader_label', 'roberta_label']].head(10))
 
