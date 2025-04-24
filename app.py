@@ -48,11 +48,44 @@ def clean_text_for_sentiment(text):
 
 
 
+
+from textblob import TextBlob
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+# TextBlob
+def analyze_textblob(text):
+    polarity = TextBlob(text).sentiment.polarity
+    if polarity > 0.05:
+        label = 'positive'
+    elif polarity < -0.05:
+        label = 'negative'
+    else:
+        label = 'neutral'
+    return polarity, label
+
+# VADER
+vader = SentimentIntensityAnalyzer()
+
+def analyze_vader(text):
+    scores = vader.polarity_scores(text)
+    compound = scores['compound']
+    if compound > 0.05:
+        label = 'positive'
+    elif compound < -0.05:
+        label = 'negative'
+    else:
+        label = 'neutral'
+    return compound, label
+
+
 # Chargement du fichier CSV via Streamlit
 st.title("Analyse des Sentiments des Tweets")
 
 df = pd.read_csv('Tweet_clean.csv')
 df['clean_text'] = df['text'].apply(clean_text_for_sentiment)
+
+
+
 
 # Affichage des résultats
 st.subheader("Aperçu des données nettoyées")
@@ -64,3 +97,31 @@ df.to_csv('tweets_cleaned_text.csv', index=False)
 # Affichage des premiers tweets nettoyés
 st.subheader("Tweets nettoyés")
 st.write(df['clean_text'].iloc[1:10])
+
+
+
+
+
+# Analyse TextBlob
+df[['textblob_polarity', 'textblob_label']] = df['clean_text'].apply(
+    lambda x: pd.Series(analyze_textblob(x))
+)
+
+# Analyse VADER
+df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
+    lambda x: pd.Series(analyze_vader(x))
+)
+
+
+
+
+# Affichage des résultats dans Streamlit
+st.subheader("Aperçu des données analysées")
+st.write(df[['text', 'clean_text', 'textblob_polarity', 'textblob_label', 'vader_compound', 'vader_label']].head())
+
+# Enregistrer le fichier nettoyé avec les analyses de sentiment
+df.to_csv('tweets_with_sentiments.csv', index=False)
+
+# Affichage des premiers tweets avec leurs sentiments
+st.subheader("Tweets avec Sentiments")
+st.write(df[['text', 'textblob_label', 'vader_label']].head(10))
