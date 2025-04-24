@@ -7,10 +7,23 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
+from nltk.data import find
+
+def safe_nltk_download(resource):
+    try:
+        find(resource)
+    except LookupError:
+        nltk.download(resource.split('/')[-1])
+
+# Vérifie et télécharge uniquement si nécessaire
+safe_nltk_download('tokenizers/punkt')
+safe_nltk_download('corpora/stopwords')
+safe_nltk_download('corpora/wordnet')
+
 # Télécharger les ressources nécessaires
-nltk.download('wordnet')
-nltk.download('punkt')
-nltk.download('stopwords')
+#nltk.download('wordnet')
+#nltk.download('punkt')
+#nltk.download('stopwords')
 
 # Initialisation
 lemmatizer = WordNetLemmatizer()
