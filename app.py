@@ -50,33 +50,4 @@ def clean_text_for_sentiment(text):
 # Chargement du fichier CSV via Streamlit
 st.title("Analyse des Sentiments des Tweets")
 
-# Télécharger un fichier
-uploaded_file = st.file_uploader("Choisir un fichier CSV", type=["csv"])
-
-if uploaded_file is not None:
-    # Lire le fichier CSV
-    df = pd.read_csv(uploaded_file)
-    
-    # Vérifier que le fichier contient une colonne 'text'
-    if 'text' in df.columns:
-        # Nettoyage des tweets
-        df['clean_text'] = df['text'].apply(clean_text_for_sentiment)
-        
-        # Afficher les premiers résultats pour validation
-        st.subheader("Aperçu des données nettoyées")
-        st.write(df[['text', 'clean_text']].head())
-        
-        # Enregistrer le fichier nettoyé
-        df.to_csv('tweets_cleaned_text.csv', index=False)
-        
-        # Afficher les premiers tweets nettoyés
-        st.subheader("Tweets nettoyés")
-        st.write(df['clean_text'].iloc[1:10])
-        
-        # Créer un graphique Plotly (ex: nombre de tweets par longueur de texte)
-        df['text_length'] = df['clean_text'].apply(len)
-        fig = px.histogram(df, x='text_length', nbins=30, title="Distribution de la longueur des tweets nettoyés")
-        
-        st.plotly_chart(fig)
-    else:
-        st.error("Le fichier CSV doit contenir une colonne 'text'.")
+df = pd.read_csv('Tweet_clean.csv')
