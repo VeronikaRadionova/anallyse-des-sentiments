@@ -202,8 +202,8 @@ import streamlit as st
 import plotly.graph_objects as go
 
 # Définir les colonnes et les titres
-columns = ['textblob_label', 'vader_label', 'roberta_label']
-titles = ['TextBlob', 'VADER', 'RoBERTa']
+columns = ['textblob_label', 'vader_label']
+titles = ['TextBlob', 'VADER']
 
 # Créer trois graphiques en anneaux côte à côte
 figs = []
