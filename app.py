@@ -155,7 +155,7 @@ def get_roberta_label(text):
         return 'neutral'  # fallback en cas d'erreur
     
 # Analyse RoBERTa
-df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
+#df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
 
 
 '''# Affichage des résultats dans Streamlit
