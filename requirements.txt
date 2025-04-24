@@ -6,3 +6,4 @@ plotly
 textblob
 vaderSentiment
 transformers
+torch
