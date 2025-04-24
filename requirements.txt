@@ -3,4 +3,5 @@ pandas
 nltk>=3.8
 matplotlib
 plotly
-
+textblob
+vaderSentiment
