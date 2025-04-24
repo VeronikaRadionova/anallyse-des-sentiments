@@ -197,27 +197,3 @@ st.plotly_chart(fig_vader)
 
 
 
-import plotly.graph_objects as go
-from sklearn.metrics import confusion_matrix
-
-labels = ['positive', 'neutral', 'negative']
-cm = confusion_matrix(df['textblob_label'], df['vader_label'], labels=labels)
-
-fig_cm = go.Figure(data=go.Heatmap(
-    z=cm,
-    x=labels,
-    y=labels,
-    colorscale='Blues',
-    hovertemplate='Prédit: %{x}<br>Réel: %{y}<br>Nombre: %{z}<extra></extra>',
-    zmin=0
-))
-
-fig_cm.update_layout(
-    title="Matrice de Confusion: TextBlob vs VADER",
-    xaxis_title="Prédiction VADER",
-    yaxis_title="Réalité TextBlob",
-    xaxis=dict(tickmode='array', tickvals=list(range(len(labels))), ticktext=labels),
-    yaxis=dict(tickmode='array', tickvals=list(range(len(labels))), ticktext=labels)
-)
-
-st.plotly_chart(fig_cm, use_container_width=True)
