@@ -2,5 +2,5 @@ streamlit
 pandas
 nltk
 matplotlib
-pyplot
+plotly
 
