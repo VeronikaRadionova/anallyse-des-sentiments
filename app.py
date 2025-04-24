@@ -78,6 +78,7 @@ def analyze_vader(text):
     return compound, label
 
 
+
 # Chargement du fichier CSV via Streamlit
 st.title("Analyse des Sentiments des Tweets")
 
@@ -130,14 +131,14 @@ st.write(df[['text', 'textblob_label', 'vader_label']].head(10))
 
 
 
-'''from transformers import pipeline
+from transformers import pipeline
 
 roberta_sentiment = pipeline(
     "sentiment-analysis",
     model="cardiffnlp/twitter-roberta-base-sentiment"
 )
 
-# Fonction pour obtenir le label de sentiment avec RoBERTa
+'''# Fonction pour obtenir le label de sentiment avec RoBERTa
 def get_roberta_label(text):
     try:
         result = roberta_sentiment(text)
