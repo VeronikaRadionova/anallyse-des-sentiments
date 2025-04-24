@@ -44,3 +44,10 @@ def clean_text_for_sentiment(text):
 
     return ' '.join(words)
 
+
+df = pd.read_csv('Tweet_clean.csv')
+df['clean_text'] = df['text'].apply(clean_text_for_sentiment)
+
+df.to_csv('tweets_cleaned_text.csv', index=False)
+print("Tweets nettoyees:")
+print(df['clean_text'].iloc[1:10])
