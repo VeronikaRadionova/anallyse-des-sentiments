@@ -173,33 +173,44 @@ st.write(df[['text', 'textblob_label', 'vader_label', 'roberta_label']].head(10)
 
 import plotly.express as px
 
-# Création des graphiques interactifs avec Plotly
+# dictionnaire de couleurs pour les sentiments
+color_map = {
+    'positive': 'green',
+    'neutral': 'gray',
+    'negative': 'red'
+}
 
-# Graphique pour TextBlob
+# TextBlob
 textblob_counts = df['textblob_label'].value_counts().reset_index()
 textblob_counts.columns = ['Sentiment', 'Count']
+textblob_counts['Color'] = textblob_counts['Sentiment'].map(color_map)
+
 fig_textblob = px.bar(textblob_counts, 
                       x='Sentiment', y='Count',
                       title="TextBlob Sentiment Distribution",
-                      color='Sentiment', color_discrete_sequence=px.colors.qualitative.Set2)
+                      color='Sentiment', color_discrete_map = color_map)
 fig_textblob.update_layout(barmode='stack')
 
-# Graphique pour VADER
+# VADER
 vader_counts = df['vader_label'].value_counts().reset_index()
 vader_counts.columns = ['Sentiment', 'Count']
+vader_counts['Color'] = vader_counts['Sentiment'].map(color_map)
+
 fig_vader = px.bar(vader_counts, 
                    x='Sentiment', y='Count',
                    title="VADER Sentiment Distribution",
-                   color='Sentiment', color_discrete_sequence=px.colors.qualitative.Set2)
+                   color='Sentiment', color_discrete_map = color_map)
 fig_vader.update_layout(barmode='stack')
 
-'''# Graphique pour RoBERTa
+'''# RoBERTa
 roberta_counts = df['roberta_label'].value_counts().reset_index()
 roberta_counts.columns = ['Sentiment', 'Count']
+roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
+
 fig_roberta = px.bar(roberta_counts, 
                      x='Sentiment', y='Count',
                      title="RoBERTa Sentiment Distribution",
-                     color='Sentiment', color_discrete_sequence=px.colors.qualitative.Set2)
+                     color='Sentiment', color_discrete_map = color_map)
 fig_roberta.update_layout(barmode='stack')'''
 
 # Affichage des graphiques dans Streamlit
