@@ -197,3 +197,43 @@ st.plotly_chart(fig_vader)
 
 
 
+
+import streamlit as st
+import plotly.graph_objects as go
+
+# Définir les colonnes et les titres
+columns = ['textblob_label', 'vader_label', 'roberta_label']
+titles = ['TextBlob', 'VADER', 'RoBERTa']
+
+# Créer trois graphiques en anneaux côte à côte
+figs = []
+for col, title in zip(columns, titles):
+    value_counts = df[col].value_counts()
+    labels = value_counts.index.tolist()
+    values = value_counts.values.tolist()
+
+    fig = go.Figure(data=[go.Pie(
+        labels=labels,
+        values=values,
+        hole=0.4,  # Donut style
+        marker=dict(colors=px.colors.qualitative.Set3),
+        textinfo='percent',
+    )])
+
+    fig.update_layout(
+        title=title,
+        margin=dict(t=50, b=0, l=0, r=0),
+        showlegend=True
+    )
+
+    figs.append(fig)
+
+# Affichage dans Streamlit : 3 colonnes côte à côte
+cols = st.columns(3)
+for col, fig in zip(cols, figs):
+    with col:
+        st.plotly_chart(fig, use_container_width=True)
+
+
+
+
