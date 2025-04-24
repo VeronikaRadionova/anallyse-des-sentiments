@@ -51,3 +51,4 @@ def clean_text_for_sentiment(text):
 st.title("Analyse des Sentiments des Tweets")
 
 df = pd.read_csv('Tweet_clean.csv')
+df['clean_text'] = df['text'].apply(clean_text_for_sentiment)
