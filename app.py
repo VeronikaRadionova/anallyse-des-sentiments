@@ -88,15 +88,15 @@ df['clean_text'] = df['text'].apply(clean_text_for_sentiment)
 
 
 # Affichage des résultats
-st.subheader("Aperçu des données nettoyées")
-st.write(df[['text', 'clean_text']].head())
+#st.subheader("Aperçu des données nettoyées")
+#st.write(df[['text', 'clean_text']].head())
 
 # Enregistrer le fichier nettoyé
-df.to_csv('tweets_cleaned_text.csv', index=False)
+#df.to_csv('tweets_cleaned_text.csv', index=False)
 
 # Affichage des premiers tweets nettoyés
-st.subheader("Tweets nettoyés")
-st.write(df['clean_text'].iloc[1:10])
+#st.subheader("Tweets nettoyés")
+#st.write(df['clean_text'].iloc[1:10])
 
 
 
@@ -125,3 +125,39 @@ df.to_csv('tweets_with_sentiments.csv', index=False)
 # Affichage des premiers tweets avec leurs sentiments
 st.subheader("Tweets avec Sentiments")
 st.write(df[['text', 'textblob_label', 'vader_label']].head(10))
+
+
+
+
+
+from transformers import pipeline
+
+roberta_sentiment = pipeline(
+    "sentiment-analysis",
+    model="cardiffnlp/twitter-roberta-base-sentiment"
+)
+
+# Fonction pour obtenir le label de sentiment avec RoBERTa
+def get_roberta_label(text):
+    try:
+        result = roberta_sentiment(text)
+        label = result[0]['label'].lower()
+        if label == 'label_0':
+            return 'negative'
+        elif label == 'label_1':
+            return 'neutral'
+        elif label == 'label_2':
+            return 'positive'
+        else:
+            return 'unknown'
+    except:
+        return 'neutral'  # fallback en cas d'erreur
+
+# Application de la fonction à la colonne 'clean_text' du DataFrame
+df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
+
+# Affichage des premières lignes du DataFrame pour vérifier le résultat
+st.write(df.head())
+
+
+
