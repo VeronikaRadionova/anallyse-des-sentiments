@@ -155,33 +155,33 @@ color_map = {
 
 # TextBlob
 textblob_counts = df['textblob_label'].value_counts().reset_index()
-textblob_counts.columns = ['Sentiment', 'Count']
+textblob_counts.columns = ['Sentiment', 'Tweets']
 textblob_counts['Color'] = textblob_counts['Sentiment'].map(color_map)
 
 fig_textblob = px.bar(textblob_counts, 
-                      x='Sentiment', y='Count',
+                      x='Sentiment', y='Tweets',
                       title="TextBlob Sentiment Distribution",
                       color='Sentiment', color_discrete_map = color_map)
 fig_textblob.update_layout(barmode='stack')
 
 # VADER
 vader_counts = df['vader_label'].value_counts().reset_index()
-vader_counts.columns = ['Sentiment', 'Count']
+vader_counts.columns = ['Sentiment', 'Tweets']
 vader_counts['Color'] = vader_counts['Sentiment'].map(color_map)
 
 fig_vader = px.bar(vader_counts, 
-                   x='Sentiment', y='Count',
+                   x='Sentiment', y='Tweets',
                    title="VADER Sentiment Distribution",
                    color='Sentiment', color_discrete_map = color_map)
 fig_vader.update_layout(barmode='stack')
 
 # RoBERTa
 #roberta_counts = df['roberta_label'].value_counts().reset_index()
-#roberta_counts.columns = ['Sentiment', 'Count']
+#roberta_counts.columns = ['Sentiment', 'Tweets']
 #roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
 
 #fig_roberta = px.bar(roberta_counts, 
- #                    x='Sentiment', y='Count',
+ #                    x='Sentiment', y='Tweets',
   #                   title="RoBERTa Sentiment Distribution",
    #                  color='Sentiment', color_discrete_map = color_map)
 #fig_roberta.update_layout(barmode='stack')
@@ -191,59 +191,4 @@ st.subheader("Répartition des sentiments (TextBlob, VADER, RoBERTa)")
 st.plotly_chart(fig_textblob)
 st.plotly_chart(fig_vader)
 #st.plotly_chart(fig_roberta)
-
-
-
-
-
-
-
-# Définir une palette cohérente (exemple)
-color_map = {
-    'positive': '#2ECC71',
-    'neutral': '#BDC3C7',
-    'negative': '#E74C3C'
-}
-
-# Créer les 3 graphes
-fig_textblob = px.bar(
-    df['textblob_label'].value_counts().reset_index(),
-    x='index', y='textblob_label',
-    title="Répartition des sentiments: TextBlob",
-    labels={'index': 'Sentiment', 'textblob_label': 'Tweets'},
-    color='index',
-    color_discrete_map=color_map
-)
-
-fig_vader = px.bar(
-    df['vader_label'].value_counts().reset_index(),
-    x='index', y='vader_label',
-    title="Répartition des sentiments: VADER",
-    labels={'index': 'Sentiment', 'vader_label': 'Tweets'},
-    color='index',
-    color_discrete_map=color_map
-)
-
-#fig_roberta = px.bar(
-#    df['roberta_label'].value_counts().reset_index(),
-#    x='index', y='roberta_label',
-#    title="Répartition des sentiments: RoBERTa",
-#    labels={'index': 'Sentiment', 'roberta_label': 'Tweets'},
-#    color='index',
-#    color_discrete_map=color_map
-#)
-
-# Afficher les 3 plots côte à côte dans Streamlit
-st.subheader("Répartition des sentiments par méthode")
-
-col1, col2 = st.columns(2)
-
-with col1:
-    st.plotly_chart(fig_textblob, use_container_width=True)
-
-with col2:
-    st.plotly_chart(fig_vader, use_container_width=True)
-
-#with col3:
- #   st.plotly_chart(fig_roberta, use_container_width=True)
 
