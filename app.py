@@ -124,7 +124,7 @@ df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
 )
 
 # Analyse RoBERTa
-#df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
+df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
 
 
 
@@ -198,8 +198,10 @@ st.plotly_chart(fig_vader)
 
 
 
-import streamlit as st
 import plotly.graph_objects as go
+
+
+st.subheader("Répartition des sentiments - Pie Chart")
 
 # Définir les colonnes et les titres
 columns = ['textblob_label', 'vader_label']
@@ -237,3 +239,40 @@ for col, fig in zip(cols, figs):
 
 
 
+
+
+
+
+
+
+# S'assurer que les dates sont bien converties
+df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
+df['date'] = df['created_at'].dt.date
+
+# Mapper les labels en scores numériques
+sentiment_map = {'negative': -1, 'neutral': 0, 'positive': 1}
+df['roberta_score'] = df['roberta_label'].map(sentiment_map)
+
+# Moyenne quotidienne des scores
+daily_sentiment = df.groupby('date')['roberta_score'].mean().reset_index()
+
+# Graphe interactif avec Plotly
+fig = px.line(
+    daily_sentiment,
+    x='date',
+    y='roberta_score',
+    title='Average Daily Sentiment (RoBERTa)',
+    markers=True,
+    labels={'roberta_score': 'Average Sentiment (-1=neg, 1=pos)', 'date': 'Date'},
+)
+
+fig.update_layout(
+    xaxis_title='Date',
+    yaxis_title='Average Sentiment',
+    xaxis_tickangle=-45,
+    yaxis=dict(dtick=0.5),
+    template='plotly_white'
+)
+
+# Affichage dans Streamlit
+st.plotly_chart(fig, use_container_width=True)
