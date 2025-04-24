@@ -1,6 +1,6 @@
 streamlit
 pandas
-nltk
+nltk>=3.8
 matplotlib
 plotly
 
