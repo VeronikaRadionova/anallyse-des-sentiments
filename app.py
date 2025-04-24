@@ -138,7 +138,7 @@ roberta_sentiment = pipeline(
     model="cardiffnlp/twitter-roberta-base-sentiment"
 )
 
-'''# Fonction pour obtenir le label de sentiment avec RoBERTa
+# Fonction pour obtenir le label de sentiment avec RoBERTa
 def get_roberta_label(text):
     try:
         result = roberta_sentiment(text)
@@ -154,7 +154,7 @@ def get_roberta_label(text):
     except:
         return 'neutral'  # fallback en cas d'erreur
 
-# Application de la fonction à la colonne 'clean_text' du DataFrame
+'''# Application de la fonction à la colonne 'clean_text' du DataFrame
 df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
 
 # Affichage des premières lignes du DataFrame pour vérifier le résultat
