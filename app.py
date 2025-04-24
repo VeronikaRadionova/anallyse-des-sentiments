@@ -158,7 +158,7 @@ def get_roberta_label(text):
 df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
 
 
-# Affichage des résultats dans Streamlit
+'''# Affichage des résultats dans Streamlit
 st.subheader("Aperçu des données analysées")
 st.write(df[['text', 'clean_text', 'textblob_polarity', 'textblob_label', 
             'vader_compound', 'vader_label', 'roberta_label']].head())
@@ -169,4 +169,42 @@ df.to_csv('tweets_with_sentiments.csv', index=False)
 # Affichage des premiers tweets avec leurs sentiments
 st.subheader("Tweets avec Sentiments")
 st.write(df[['text', 'textblob_label', 'vader_label', 'roberta_label']].head(10))
+'''
+
+
+
+
+import plotly.express as px
+
+# Création des graphiques interactifs avec Plotly
+
+# Graphique pour TextBlob
+fig_textblob = px.bar(df['textblob_label'].value_counts().reset_index(), 
+                      x='index', y='textblob_label',
+                      title="TextBlob Sentiment Distribution",
+                      labels={'index': 'Sentiment', 'textblob_label': 'Count'},
+                      color='index', color_discrete_sequence=px.colors.qualitative.Set2)
+fig_textblob.update_layout(barmode='stack')
+
+# Graphique pour VADER
+fig_vader = px.bar(df['vader_label'].value_counts().reset_index(), 
+                   x='index', y='vader_label',
+                   title="VADER Sentiment Distribution",
+                   labels={'index': 'Sentiment', 'vader_label': 'Count'},
+                   color='index', color_discrete_sequence=px.colors.qualitative.Set2)
+fig_vader.update_layout(barmode='stack')
+
+'''# Graphique pour RoBERTa
+fig_roberta = px.bar(df['roberta_label'].value_counts().reset_index(), 
+                     x='index', y='roberta_label',
+                     title="RoBERTa Sentiment Distribution",
+                     labels={'index': 'Sentiment', 'roberta_label': 'Count'},
+                     color='index', color_discrete_sequence=px.colors.qualitative.Set2)
+fig_roberta.update_layout(barmode='stack')'''
+
+# Affichage des graphiques dans Streamlit
+st.subheader("Répartition des sentiments (TextBlob, VADER, RoBERTa)")
+st.plotly_chart(fig_textblob)
+st.plotly_chart(fig_vader)
+#st.plotly_chart(fig_roberta)
 
