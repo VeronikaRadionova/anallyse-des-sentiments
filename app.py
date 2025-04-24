@@ -78,6 +78,30 @@ def analyze_vader(text):
     return compound, label
 
 
+from transformers import pipeline
+
+roberta_sentiment = pipeline(
+    "sentiment-analysis",
+    model="cardiffnlp/twitter-roberta-base-sentiment"
+)
+
+# Fonction pour obtenir le label de sentiment avec RoBERTa
+def get_roberta_label(text):
+    try:
+        result = roberta_sentiment(text)
+        label = result[0]['label'].lower()
+        if label == 'label_0':
+            return 'negative'
+        elif label == 'label_1':
+            return 'neutral'
+        elif label == 'label_2':
+            return 'positive'
+        else:
+            return 'unknown'
+    except:
+        return 'neutral'  # fallback en cas d'erreur
+
+
 
 # Chargement du fichier CSV via Streamlit
 st.title("Analyse des Sentiments des Tweets")
@@ -113,6 +137,9 @@ df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
     lambda x: pd.Series(analyze_vader(x))
 )
 
+# Analyse RoBERTa
+#df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
+
 
 
 
@@ -127,35 +154,6 @@ df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
 #st.subheader("Tweets avec Sentiments")
 #st.write(df[['text', 'textblob_label', 'vader_label']].head(10))
 
-
-
-
-
-from transformers import pipeline
-
-roberta_sentiment = pipeline(
-    "sentiment-analysis",
-    model="cardiffnlp/twitter-roberta-base-sentiment"
-)
-
-# Fonction pour obtenir le label de sentiment avec RoBERTa
-def get_roberta_label(text):
-    try:
-        result = roberta_sentiment(text)
-        label = result[0]['label'].lower()
-        if label == 'label_0':
-            return 'negative'
-        elif label == 'label_1':
-            return 'neutral'
-        elif label == 'label_2':
-            return 'positive'
-        else:
-            return 'unknown'
-    except:
-        return 'neutral'  # fallback en cas d'erreur
-    
-# Analyse RoBERTa
-#df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
 
 
 '''# Affichage des résultats dans Streamlit
@@ -173,33 +171,35 @@ st.write(df[['text', 'textblob_label', 'vader_label', 'roberta_label']].head(10)
 
 
 
-
 import plotly.express as px
 
 # Création des graphiques interactifs avec Plotly
 
 # Graphique pour TextBlob
-fig_textblob = px.bar(df['textblob_label'].value_counts().reset_index(), 
-                      x='index', y='textblob_label',
+textblob_counts = df['textblob_label'].value_counts().reset_index()
+textblob_counts.columns = ['Sentiment', 'Count']
+fig_textblob = px.bar(textblob_counts, 
+                      x='Sentiment', y='Count',
                       title="TextBlob Sentiment Distribution",
-                      labels={'index': 'Sentiment', 'textblob_label': 'Count'},
-                      color='index', color_discrete_sequence=px.colors.qualitative.Set2)
+                      color='Sentiment', color_discrete_sequence=px.colors.qualitative.Set2)
 fig_textblob.update_layout(barmode='stack')
 
 # Graphique pour VADER
-fig_vader = px.bar(df['vader_label'].value_counts().reset_index(), 
-                   x='index', y='vader_label',
+vader_counts = df['vader_label'].value_counts().reset_index()
+vader_counts.columns = ['Sentiment', 'Count']
+fig_vader = px.bar(vader_counts, 
+                   x='Sentiment', y='Count',
                    title="VADER Sentiment Distribution",
-                   labels={'index': 'Sentiment', 'vader_label': 'Count'},
-                   color='index', color_discrete_sequence=px.colors.qualitative.Set2)
+                   color='Sentiment', color_discrete_sequence=px.colors.qualitative.Set2)
 fig_vader.update_layout(barmode='stack')
 
 '''# Graphique pour RoBERTa
-fig_roberta = px.bar(df['roberta_label'].value_counts().reset_index(), 
-                     x='index', y='roberta_label',
+roberta_counts = df['roberta_label'].value_counts().reset_index()
+roberta_counts.columns = ['Sentiment', 'Count']
+fig_roberta = px.bar(roberta_counts, 
+                     x='Sentiment', y='Count',
                      title="RoBERTa Sentiment Distribution",
-                     labels={'index': 'Sentiment', 'roberta_label': 'Count'},
-                     color='index', color_discrete_sequence=px.colors.qualitative.Set2)
+                     color='Sentiment', color_discrete_sequence=px.colors.qualitative.Set2)
 fig_roberta.update_layout(barmode='stack')'''
 
 # Affichage des graphiques dans Streamlit
