@@ -256,7 +256,7 @@ sentiment_map = {'negative': -1, 'neutral': 0, 'positive': 1}
 df['vader_score'] = df['vader_label'].map(sentiment_map)
 
 # moyenne quotidienne des scores
-daily_sentiment = df.groupby('date')['roberta_score'].mean().reset_index()
+daily_sentiment = df.groupby('date')['vader_score'].mean().reset_index()
 
 # affichage
 fig = px.line(
