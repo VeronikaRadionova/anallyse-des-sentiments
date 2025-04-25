@@ -8,13 +8,13 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
 
-# Télécharger les ressources nécessaires
+# téléchargement des ressources nécessaires
 nltk.download('wordnet')
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('punkt_tab')
 
-# Initialisation
+# initialisation
 lemmatizer = WordNetLemmatizer()
 
 def clean_text_for_sentiment(text):
@@ -51,6 +51,7 @@ def clean_text_for_sentiment(text):
 
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from transformers import pipeline
 
 # TextBlob
 def analyze_textblob(text):
@@ -62,6 +63,7 @@ def analyze_textblob(text):
     else:
         label = 'neutral'
     return polarity, label
+
 
 # VADER
 vader = SentimentIntensityAnalyzer()
@@ -78,14 +80,12 @@ def analyze_vader(text):
     return compound, label
 
 
-from transformers import pipeline
-
 roberta_sentiment = pipeline(
     "sentiment-analysis",
     model="cardiffnlp/twitter-roberta-base-sentiment"
 )
 
-# Fonction pour obtenir le label de sentiment avec RoBERTa
+# RoBERTa
 def get_roberta_label(text):
     try:
         result = roberta_sentiment(text)
@@ -103,9 +103,11 @@ def get_roberta_label(text):
 
 
 
-# Chargement du fichier CSV via Streamlit
+# MAIN AFFICHAGE
+
 st.title("Analyse des Sentiments des Tweets")
 
+# chargement du fichier CSV
 df = pd.read_csv('Tweet_clean.csv')
 df['clean_text'] = df['text'].apply(clean_text_for_sentiment)
 
@@ -113,18 +115,18 @@ df['clean_text'] = df['text'].apply(clean_text_for_sentiment)
 
 
 
-# Analyse TextBlob
+# analyse TextBlob
 df[['textblob_polarity', 'textblob_label']] = df['clean_text'].apply(
     lambda x: pd.Series(analyze_textblob(x))
 )
 
-# Analyse VADER
+# analyse VADER
 df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
     lambda x: pd.Series(analyze_vader(x))
 )
 
-# Analyse RoBERTa
-df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
+# analyse RoBERTa
+#df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
 
 
 
@@ -186,7 +188,7 @@ fig_vader.update_layout(barmode='stack')
    #                  color='Sentiment', color_discrete_map = color_map)
 #fig_roberta.update_layout(barmode='stack')
 
-# Affichage
+# affichage
 st.subheader("Répartition des sentiments (TextBlob, VADER, RoBERTa)")
 st.plotly_chart(fig_textblob)
 st.plotly_chart(fig_vader)
@@ -203,11 +205,11 @@ import plotly.graph_objects as go
 
 st.subheader("Répartition des sentiments - Pie Chart")
 
-# Définir les colonnes et les titres
+# colonnes et titres
 columns = ['textblob_label', 'vader_label']
 titles = ['TextBlob', 'VADER']
 
-# Créer trois graphiques en anneaux côte à côte
+# affichage
 figs = []
 for col, title in zip(columns, titles):
     value_counts = df[col].value_counts()
@@ -218,7 +220,7 @@ for col, title in zip(columns, titles):
         labels=labels,
         values=values,
         hole=0.4,  # Donut style
-        marker=dict(colors=px.colors.qualitative.Set3),
+        marker=dict(colors=color_map), # pofixit !!!!!!!
         textinfo='percent',
     )])
 
@@ -230,7 +232,7 @@ for col, title in zip(columns, titles):
 
     figs.append(fig)
 
-# Affichage dans Streamlit : 3 colonnes côte à côte
+
 cols = st.columns(3)
 for col, fig in zip(cols, figs):
     with col:
@@ -243,20 +245,20 @@ for col, fig in zip(cols, figs):
 
 
 
+'''st.subheader("Timeline")
 
-
-# S'assurer que les dates sont bien converties
+# vérification que les dates sont bien converties
 df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
 df['date'] = df['created_at'].dt.date
 
-# Mapper les labels en scores numériques
+# mapper les labels en scores numériques
 sentiment_map = {'negative': -1, 'neutral': 0, 'positive': 1}
 df['roberta_score'] = df['roberta_label'].map(sentiment_map)
 
-# Moyenne quotidienne des scores
+# moyenne quotidienne des scores
 daily_sentiment = df.groupby('date')['roberta_score'].mean().reset_index()
 
-# Graphe interactif avec Plotly
+# affichage
 fig = px.line(
     daily_sentiment,
     x='date',
@@ -274,5 +276,38 @@ fig.update_layout(
     template='plotly_white'
 )
 
-# Affichage dans Streamlit
 st.plotly_chart(fig, use_container_width=True)
+
+
+
+
+
+
+
+
+
+
+
+
+# calcul du score moyen par topic
+topic_sentiment = df.groupby('topic')['roberta_score'].mean().sort_values().reset_index()
+
+# affichage
+fig = px.bar(
+    topic_sentiment,
+    x='roberta_score',
+    y='topic',
+    orientation='h',
+    title='Average Topic Sentiment (RoBERTa)',
+    labels={'roberta_score': 'Average Sentiment', 'topic': 'Topic'},
+    color='roberta_score',
+    color_continuous_scale='RdYlGn',
+)
+
+fig.update_layout(
+    xaxis_title='Average Sentiment',
+    yaxis_title='Topic',
+    template='plotly_white'
+)
+
+st.plotly_chart(fig, use_container_width=True)'''
