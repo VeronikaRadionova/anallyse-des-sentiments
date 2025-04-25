@@ -245,7 +245,7 @@ for col, fig in zip(cols, figs):
 
 
 
-'''st.subheader("Timeline")
+st.subheader("Timeline")
 
 # vérification que les dates sont bien converties
 df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
@@ -253,7 +253,7 @@ df['date'] = df['created_at'].dt.date
 
 # mapper les labels en scores numériques
 sentiment_map = {'negative': -1, 'neutral': 0, 'positive': 1}
-df['roberta_score'] = df['roberta_label'].map(sentiment_map)
+df['vader_score'] = df['vader_label'].map(sentiment_map)
 
 # moyenne quotidienne des scores
 daily_sentiment = df.groupby('date')['roberta_score'].mean().reset_index()
@@ -262,10 +262,10 @@ daily_sentiment = df.groupby('date')['roberta_score'].mean().reset_index()
 fig = px.line(
     daily_sentiment,
     x='date',
-    y='roberta_score',
-    title='Average Daily Sentiment (RoBERTa)',
+    y='vader_score',
+    title='Average Daily Sentiment (VADER)',
     markers=True,
-    labels={'roberta_score': 'Average Sentiment (-1=neg, 1=pos)', 'date': 'Date'},
+    labels={'vader_score': 'Average Sentiment (-1=neg, 1=pos)', 'date': 'Date'},
 )
 
 fig.update_layout(
@@ -286,21 +286,18 @@ st.plotly_chart(fig, use_container_width=True)
 
 
 
-
-
-
 # calcul du score moyen par topic
-topic_sentiment = df.groupby('topic')['roberta_score'].mean().sort_values().reset_index()
+topic_sentiment = df.groupby('topic')['vader_score'].mean().sort_values().reset_index()
 
 # affichage
 fig = px.bar(
     topic_sentiment,
-    x='roberta_score',
+    x='vader_score',
     y='topic',
     orientation='h',
     title='Average Topic Sentiment (RoBERTa)',
-    labels={'roberta_score': 'Average Sentiment', 'topic': 'Topic'},
-    color='roberta_score',
+    labels={'vader_score': 'Average Sentiment', 'topic': 'Topic'},
+    color='vader_score',
     color_continuous_scale='RdYlGn',
 )
 
@@ -310,4 +307,4 @@ fig.update_layout(
     template='plotly_white'
 )
 
-st.plotly_chart(fig, use_container_width=True)'''
+st.plotly_chart(fig, use_container_width=True)
