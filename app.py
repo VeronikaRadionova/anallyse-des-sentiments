@@ -220,7 +220,7 @@ for col, title in zip(columns, titles):
         labels=labels,
         values=values,
         hole=0.4,  # Donut style
-        marker=dict(colors=px.color.qualitative.Set3), # pofixit !!!!!!!
+        marker=dict(colors=px.colors.qualitative.Set3), # pofixit !!!!!!!
         textinfo='percent',
     )])
 
