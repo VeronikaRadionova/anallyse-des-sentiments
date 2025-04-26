@@ -157,11 +157,11 @@ fig_roberta = px.bar(roberta_counts,
 fig_roberta.update_layout(barmode='stack')
 
 # affichage
-st.subheader("Répartition des sentiments (TextBlob, VADER, RoBERTa)")
-st.plotly_chart(fig_roberta)
+st.subheader("Répartition des sentiments RoBERTa")
+#st.plotly_chart(fig_roberta)
 
 
-st.subheader("Répartition des sentiments - Pie Chart")
+#st.subheader("Répartition des sentiments - Pie Chart")
 
     # colonnes et titres
 col = 'roberta_label'
@@ -172,7 +172,7 @@ labels = value_counts.index.tolist()
 values = value_counts.values.tolist()
 
     # Création du donut
-fig = go.Figure(data=[go.Pie(
+fig_pie = go.Figure(data=[go.Pie(
         labels=labels,
         values=values,
         hole=0.4,  # Donut style
@@ -181,14 +181,22 @@ fig = go.Figure(data=[go.Pie(
     )])
 
     # Layout
-fig.update_layout(
+fig_pie.update_layout(
         title=title,
         margin=dict(t=50, b=0, l=0, r=0),
         showlegend=True
     )
 
     # Affichage Streamlit
-st.plotly_chart(fig, use_container_width=True)
+#st.plotly_chart(fig, use_container_width=True)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.plotly_chart(fig_roberta, use_container_width=True)
+
+with col2:
+    st.plotly_chart(fig_pie, use_container_width=True)
 
 
 
