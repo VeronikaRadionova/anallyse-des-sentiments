@@ -137,23 +137,23 @@ st.title("Analyse des Sentiments des Tweets")
 df = pd.read_csv('tweets_with_sentiments.csv')
 
 # dictionnaire de couleurs pour les sentiments
-color_map = {
-    'positive': 'green',
-    'neutral': 'gray',
-    'negative': 'red'
-}
-
 set3_colors = px.colors.qualitative.Set3
+
+color_map = {
+    'positive': set3_colors[1],
+    'neutral': set3_colors[0],
+    'negative': set3_colors[2]
+}
 
 # RoBERTa
 roberta_counts = df['roberta_label'].value_counts().reset_index()
 roberta_counts.columns = ['Sentiment', 'Tweets']
-#roberta_counts['Color'] = roberta_counts['Sentiment'].map(set3_colors)
+roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
 
 fig_roberta = px.bar(roberta_counts, 
                         x='Sentiment', y='Tweets',
                         title="RoBERTa Sentiment Distribution",
-                        color='Sentiment', color_discrete_map = set3_colors)
+                        color='Sentiment', color_discrete_map = color_map)
 fig_roberta.update_layout(barmode='stack')
 
 # affichage
