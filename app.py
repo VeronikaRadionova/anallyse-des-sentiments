@@ -134,7 +134,7 @@ st.title("Analyse des Sentiments des Tweets")
         st.error("tweets_with_sentiments est manquant dans les données chargées")
         return'''
 
-df = pd.read_csv('tweets_with_sentiments')
+df = pd.read_csv('tweets_with_sentiments.csv')
 
 # dictionnaire de couleurs pour les sentiments
 color_map = {
@@ -151,7 +151,7 @@ roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
 fig_roberta = px.bar(roberta_counts, 
                         x='Sentiment', y='Tweets',
                         title="RoBERTa Sentiment Distribution",
-                        color='Sentiment', color_discrete_map = color_map)
+                        color='Sentiment', color_discrete_map = px.colors.qualitative.Set3)
 fig_roberta.update_layout(barmode='stack')
 
 # affichage
