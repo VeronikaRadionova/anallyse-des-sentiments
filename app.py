@@ -170,7 +170,7 @@ st.subheader("Répartition des sentiments RoBERTa")
 
     # colonnes et titres
 col = 'roberta_label'
-title = None
+title = ''
 
 value_counts = df[col].value_counts()
 labels = value_counts.index.tolist()
