@@ -190,7 +190,7 @@ fig_pie.update_layout(
     # Affichage Streamlit
 #st.plotly_chart(fig, use_container_width=True)
 
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([2,1])
 
 with col1:
     st.plotly_chart(fig_roberta, use_container_width=True)
