@@ -125,6 +125,11 @@ df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
 
 
 
+
+
+
+
+
 # MAIN AFFICHAGE
 
 #def analyse_sentiments(dataframes, labels): 
@@ -152,7 +157,7 @@ roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
 
 fig_roberta = px.bar(roberta_counts, 
                         x='Sentiment', y='Tweets',
-                        title="RoBERTa Sentiment Distribution",
+                        title=None,
                         color='Sentiment', color_discrete_map = color_map)
 fig_roberta.update_layout(barmode='stack')
 
@@ -165,7 +170,7 @@ st.subheader("Répartition des sentiments RoBERTa")
 
     # colonnes et titres
 col = 'roberta_label'
-title = 'RoBERTa'
+#title = 'RoBERTa'
 
 value_counts = df[col].value_counts()
 labels = value_counts.index.tolist()
@@ -182,7 +187,7 @@ fig_pie = go.Figure(data=[go.Pie(
 
     # Layout
 fig_pie.update_layout(
-        title=title,
+        title=None,
         margin=dict(t=50, b=0, l=0, r=0),
         showlegend=True
     )
