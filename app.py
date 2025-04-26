@@ -143,6 +143,8 @@ color_map = {
     'negative': 'red'
 }
 
+set3_colors = px.colors.qualitative.Set3
+
 # RoBERTa
 roberta_counts = df['roberta_label'].value_counts().reset_index()
 roberta_counts.columns = ['Sentiment', 'Tweets']
@@ -151,7 +153,7 @@ roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
 fig_roberta = px.bar(roberta_counts, 
                         x='Sentiment', y='Tweets',
                         title="RoBERTa Sentiment Distribution",
-                        color='Sentiment', color_discrete_map = px.colors.qualitative.Set3)
+                        color='Sentiment', color_discrete_map = set3_colors)
 fig_roberta.update_layout(barmode='stack')
 
 # affichage
