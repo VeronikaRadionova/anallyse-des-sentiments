@@ -148,7 +148,7 @@ set3_colors = px.colors.qualitative.Set3
 # RoBERTa
 roberta_counts = df['roberta_label'].value_counts().reset_index()
 roberta_counts.columns = ['Sentiment', 'Tweets']
-roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
+roberta_counts['Color'] = roberta_counts['Sentiment'].map(set3_colors)
 
 fig_roberta = px.bar(roberta_counts, 
                         x='Sentiment', y='Tweets',
