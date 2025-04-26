@@ -191,7 +191,7 @@ fig_pie = go.Figure(data=[go.Pie(
 fig_pie.update_layout(
         title=title,
         margin=dict(t=50, b=0, l=0, r=0),
-        showlegend=True
+        showlegend=False
     )
 
     # Affichage Streamlit
