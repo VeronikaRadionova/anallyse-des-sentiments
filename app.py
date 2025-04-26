@@ -176,7 +176,7 @@ fig = go.Figure(data=[go.Pie(
         labels=labels,
         values=values,
         hole=0.4,  # Donut style
-        marker=dict(colors=px.colors.qualitative.Set3),
+        marker=dict(colors=set3_colors),
         textinfo='percent',
     )])
 
