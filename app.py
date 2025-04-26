@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import re
 
-import nltk
+'''import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
@@ -102,17 +102,9 @@ def get_roberta_label(text):
         return 'neutral'  # fallback en cas d'erreur
 
 
-
-# MAIN AFFICHAGE
-
-st.title("Analyse des Sentiments des Tweets")
-
 # chargement du fichier CSV
 df = pd.read_csv('Tweet_clean.csv')
 df['clean_text'] = df['text'].apply(clean_text_for_sentiment)
-
-
-
 
 
 # analyse TextBlob
@@ -127,7 +119,12 @@ df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
 
 # analyse RoBERTa
 #df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
+'''
 
+
+# MAIN AFFICHAGE
+
+st.title("Analyse des Sentiments des Tweets")
 
 
 '''# Affichage des résultats dans Streamlit
@@ -143,8 +140,7 @@ st.subheader("Tweets avec Sentiments")
 st.write(df[['text', 'textblob_label', 'vader_label', 'roberta_label']].head(10))
 '''
 
-
-
+df = pd.read_csv('tweets_with_sentiments.csv')
 
 import plotly.express as px
 
@@ -155,7 +151,7 @@ color_map = {
     'negative': 'red'
 }
 
-# TextBlob
+'''# TextBlob
 textblob_counts = df['textblob_label'].value_counts().reset_index()
 textblob_counts.columns = ['Sentiment', 'Tweets']
 textblob_counts['Color'] = textblob_counts['Sentiment'].map(color_map)
@@ -175,24 +171,24 @@ fig_vader = px.bar(vader_counts,
                    x='Sentiment', y='Tweets',
                    title="VADER Sentiment Distribution",
                    color='Sentiment', color_discrete_map = color_map)
-fig_vader.update_layout(barmode='stack')
+fig_vader.update_layout(barmode='stack')'''
 
 # RoBERTa
-#roberta_counts = df['roberta_label'].value_counts().reset_index()
-#roberta_counts.columns = ['Sentiment', 'Tweets']
-#roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
+roberta_counts = df['roberta_label'].value_counts().reset_index()
+roberta_counts.columns = ['Sentiment', 'Tweets']
+roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
 
-#fig_roberta = px.bar(roberta_counts, 
- #                    x='Sentiment', y='Tweets',
-  #                   title="RoBERTa Sentiment Distribution",
-   #                  color='Sentiment', color_discrete_map = color_map)
-#fig_roberta.update_layout(barmode='stack')
+fig_roberta = px.bar(roberta_counts, 
+                     x='Sentiment', y='Tweets',
+                     title="RoBERTa Sentiment Distribution",
+                     color='Sentiment', color_discrete_map = color_map)
+fig_roberta.update_layout(barmode='stack')
 
 # affichage
 st.subheader("Répartition des sentiments (TextBlob, VADER, RoBERTa)")
-st.plotly_chart(fig_textblob)
-st.plotly_chart(fig_vader)
-#st.plotly_chart(fig_roberta)
+#st.plotly_chart(fig_textblob)
+#st.plotly_chart(fig_vader)
+st.plotly_chart(fig_roberta)
 
 
 
@@ -206,8 +202,8 @@ import plotly.graph_objects as go
 st.subheader("Répartition des sentiments - Pie Chart")
 
 # colonnes et titres
-columns = ['textblob_label', 'vader_label']
-titles = ['TextBlob', 'VADER']
+columns = ['roberta_label']
+titles = ['RoBERTa']
 
 # affichage
 figs = []
@@ -220,7 +216,7 @@ for col, title in zip(columns, titles):
         labels=labels,
         values=values,
         hole=0.4,  # Donut style
-        marker=dict(colors=px.colors.qualitative.Set3), # pofixit !!!!!!!
+        marker=dict(colors=px.colors.qualitative.Set3),
         textinfo='percent',
     )])
 
