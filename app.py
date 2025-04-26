@@ -170,7 +170,7 @@ st.subheader("Répartition des sentiments RoBERTa")
 
     # colonnes et titres
 col = 'roberta_label'
-#title = 'RoBERTa'
+title = None
 
 value_counts = df[col].value_counts()
 labels = value_counts.index.tolist()
@@ -187,7 +187,7 @@ fig_pie = go.Figure(data=[go.Pie(
 
     # Layout
 fig_pie.update_layout(
-        title=None,
+        title=title,
         margin=dict(t=50, b=0, l=0, r=0),
         showlegend=True
     )
