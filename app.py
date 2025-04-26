@@ -176,12 +176,14 @@ value_counts = df[col].value_counts()
 labels = value_counts.index.tolist()
 values = value_counts.values.tolist()
 
+donut_colors = [color_map[label] for label in labels]
+
     # Création du donut
 fig_pie = go.Figure(data=[go.Pie(
         labels=labels,
         values=values,
         hole=0.4,  # Donut style
-        marker=dict(colors=set3_colors),
+        marker=dict(colors=donut_colors),
         textinfo='percent',
     )])
 
