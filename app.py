@@ -243,58 +243,7 @@ st.plotly_chart(fig, use_container_width=True)
 
 
 
-st.subheader("Timeline")
 
-# Conversion date
-df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
-df['date'] = df['created_at'].dt.date
-
-# Mapping des sentiments
-sentiment_map = {'negative': -1, 'neutral': 0, 'positive': 1}
-df['vader_score'] = df['vader_label'].map(sentiment_map)
-
-# Moyenne quotidienne
-daily_sentiment = df.groupby('date')['vader_score'].mean().reset_index()
-
-# Nouveau graphique
-fig = px.line(
-    daily_sentiment,
-    x='date',
-    y='vader_score',
-    title='Évolution Quotidienne du Sentiment (VADER)',
-    markers=True,
-    labels={'date': 'Date', 'vader_score': 'Sentiment Moyen'},
-)
-
-# Mise en page propre
-fig.update_layout(
-    template='simple_white',  # thème épuré
-    title_x=0.5,  # centrer le titre
-    title_font=dict(size=24, family="Arial", color="black"),
-    xaxis_title='',
-    yaxis_title='Sentiment Moyen',
-    xaxis=dict(
-        tickangle=-45,
-        tickfont=dict(size=10),
-        showgrid=True,
-        gridwidth=1,
-        gridcolor='LightGrey'
-    ),
-    yaxis=dict(
-        range=[-1, 1],
-        dtick=0.5,
-        showgrid=True,
-        gridwidth=1,
-        gridcolor='LightGrey'
-    ),
-    plot_bgcolor='white',
-)
-
-# Tracé plus épais pour la ligne
-fig.update_traces(line=dict(color='royalblue', width=3))
-
-# Affichage Streamlit
-st.plotly_chart(fig, use_container_width=True)
 
 
 
