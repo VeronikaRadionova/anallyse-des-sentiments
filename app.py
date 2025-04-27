@@ -132,54 +132,52 @@ df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
 
 # MAIN AFFICHAGE
 
-#def analyse_sentiments(dataframes, labels): 
-st.title("Analyse des Sentiments des Tweets")
+def analyse_sentiments(dataframes, labels): 
+    st.title("Analyse des Sentiments des Tweets")
 
-'''if "tweets_with_sentiments" not in dataframes:
+    if "tweets_with_sentiments" not in dataframes:
         st.error("tweets_with_sentiments est manquant dans les données chargées")
-        return'''
+        return
 
-df = pd.read_csv('tweets_with_sentiments.csv')
+    df = pd.read_csv('tweets_with_sentiments.csv')
 
-# dictionnaire de couleurs pour les sentiments
-set3_colors = px.colors.qualitative.Set3
+    # dictionnaire de couleurs pour les sentiments
+    set3_colors = px.colors.qualitative.Set3
 
-color_map = {
-    'positive': set3_colors[1],
-    'neutral': set3_colors[0],
-    'negative': set3_colors[2]
-}
+    color_map = {
+        'positive': set3_colors[1],
+        'neutral': set3_colors[0],
+        'negative': set3_colors[2]
+    }
 
-# RoBERTa
-roberta_counts = df['roberta_label'].value_counts().reset_index()
-roberta_counts.columns = ['Sentiment', 'Tweets']
-roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
+    # RoBERTa
+    roberta_counts = df['roberta_label'].value_counts().reset_index()
+    roberta_counts.columns = ['Sentiment', 'Tweets']
+    roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
 
-fig_roberta = px.bar(roberta_counts, 
+    fig_roberta = px.bar(roberta_counts, 
                         x='Sentiment', y='Tweets',
                         title=None,
                         color='Sentiment', color_discrete_map = color_map)
-fig_roberta.update_layout(barmode='stack')
+    fig_roberta.update_layout(barmode='stack')
 
-# affichage
-st.subheader("Répartition des sentiments RoBERTa")
-#st.plotly_chart(fig_roberta)
+    # affichage
+    st.subheader("Répartition des sentiments RoBERTa")
 
 
-#st.subheader("Répartition des sentiments - Pie Chart")
 
     # colonnes et titres
-col = 'roberta_label'
-title = ''
+    col = 'roberta_label'
+    title = ''
 
-value_counts = df[col].value_counts()
-labels = value_counts.index.tolist()
-values = value_counts.values.tolist()
+    value_counts = df[col].value_counts()
+    labels = value_counts.index.tolist()
+    values = value_counts.values.tolist()
 
-donut_colors = [color_map[label] for label in labels]
+    donut_colors = [color_map[label] for label in labels]
 
     # Création du donut
-fig_pie = go.Figure(data=[go.Pie(
+    fig_pie = go.Figure(data=[go.Pie(
         labels=labels,
         values=values,
         hole=0.4,  # Donut style
@@ -188,41 +186,38 @@ fig_pie = go.Figure(data=[go.Pie(
     )])
 
     # Layout
-fig_pie.update_layout(
+    fig_pie.update_layout(
         title=title,
         margin=dict(t=50, b=0, l=0, r=0),
         showlegend=False
     )
 
-    # Affichage Streamlit
-#st.plotly_chart(fig, use_container_width=True)
+    col1, col2 = st.columns([2,1])
 
-col1, col2 = st.columns([2,1])
+    with col1:
+        st.plotly_chart(fig_roberta, use_container_width=True)
 
-with col1:
-    st.plotly_chart(fig_roberta, use_container_width=True)
-
-with col2:
-    st.plotly_chart(fig_pie, use_container_width=True)
+    with col2:
+        st.plotly_chart(fig_pie, use_container_width=True)
 
 
 
 
-st.subheader("Timeline")
+    st.subheader("Timeline")
 
     # vérification que les dates sont bien converties
-df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
-df['date'] = df['created_at'].dt.date
+    df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
+    df['date'] = df['created_at'].dt.date
 
     # mapper les labels en scores numériques
-sentiment_map = {'negative': -1, 'neutral': 0, 'positive': 1}
-df['vader_score'] = df['vader_label'].map(sentiment_map)
+    sentiment_map = {'negative': -1, 'neutral': 0, 'positive': 1}
+    df['vader_score'] = df['vader_label'].map(sentiment_map)
 
     # moyenne quotidienne des scores
-daily_sentiment = df.groupby('date')['vader_score'].mean().reset_index()
+    daily_sentiment = df.groupby('date')['vader_score'].mean().reset_index()
 
     # affichage
-fig = px.line(
+    fig = px.line(
         daily_sentiment,
         x='date',
         y='vader_score',
@@ -231,7 +226,7 @@ fig = px.line(
         labels={'vader_score': 'Average Sentiment (-1=neg, 1=pos)', 'date': 'Date'},
     )
 
-fig.update_layout(
+    fig.update_layout(
         xaxis_title='Date',
         yaxis_title='Average Sentiment',
         xaxis_tickangle=-45,
@@ -239,20 +234,16 @@ fig.update_layout(
         template='plotly_white'
     )
 
-st.plotly_chart(fig, use_container_width=True)
-
-
-
-
+    st.plotly_chart(fig, use_container_width=True)
 
 
 
 
     # calcul du score moyen par topic
-topic_sentiment = df.groupby('topic')['vader_score'].mean().sort_values().reset_index()
+    topic_sentiment = df.groupby('topic')['vader_score'].mean().sort_values().reset_index()
 
     # affichage
-fig = px.bar(
+    fig = px.bar(
         topic_sentiment,
         x='vader_score',
         y='topic',
@@ -263,42 +254,13 @@ fig = px.bar(
         color_continuous_scale='RdYlGn',
     )
 
-fig.update_layout(
+    fig.update_layout(
         xaxis_title='Average Sentiment',
         yaxis_title='Topic',
         template='plotly_white'
     )
 
-st.plotly_chart(fig, use_container_width=True)
-
-'''# affichage
-    figs = []
-    for col, title in zip(columns, titles):
-        value_counts = df[col].value_counts()
-        labels = value_counts.index.tolist()
-        values = value_counts.values.tolist()
-
-    fig = go.Figure(data=[go.Pie(
-            labels=labels,
-            values=values,
-            hole=0.4,  # Donut style
-            marker=dict(colors=px.colors.qualitative.Set3),
-            textinfo='percent',
-    )])
-
-    fig.update_layout(
-        title=title,
-        margin=dict(t=50, b=0, l=0, r=0),
-        showlegend=True
-    )
-
-    figs.append(fig)
-
-
-    cols = st.columns(3)
-    for col, fig in zip(cols, figs):
-        with col:
-            st.plotly_chart(fig, use_container_width=True)'''
+    st.plotly_chart(fig, use_container_width=True)
     
 
 
