@@ -121,7 +121,7 @@ label_to_code = {v: k for k, v in labels.items()}
 
 # MAIN AFFICHAGE
 def analyse_sentiments(dataframes, labels): 
-    st.title("🎭Analyse des Sentiments des Tweets")
+    st.title("Analyse des Sentiments 🎭")
 
     # chargement de dataframe
     if "tweets_with_sentiments" not in dataframes:
