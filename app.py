@@ -210,7 +210,7 @@ def analyse_sentiments(dataframes, labels):
     fig_roberta.update_layout(barmode='stack')
 
     # affichage
-    st.subheader("Répartition des sentiments pour {selected_label}")
+    st.subheader("Répartition des sentiments")
 
 
 
@@ -250,7 +250,7 @@ def analyse_sentiments(dataframes, labels):
 
 
 
-
+    # EVOLUTION DANS LE TEMPS
     st.subheader("Timeline")
 
     # vérification que les dates sont bien converties
@@ -287,7 +287,7 @@ def analyse_sentiments(dataframes, labels):
 
 
 
-    # calcul du score moyen par topic
+    '''# calcul du score moyen par topic
     topic_sentiment = df.groupby('topic')['vader_score'].mean().sort_values().reset_index()
 
     # affichage
@@ -313,7 +313,7 @@ def analyse_sentiments(dataframes, labels):
 
 
 
-analyse_sentiments(dataframes,labels)
+analyse_sentiments(dataframes,labels)'''
 
 
 
@@ -343,10 +343,10 @@ fig_vader = px.bar(vader_counts,
                    x='Sentiment', y='Tweets',
                    title="VADER Sentiment Distribution",
                    color='Sentiment', color_discrete_map = color_map)
-fig_vader.update_layout(barmode='stack')'''
+fig_vader.update_layout(barmode='stack')
 
-#st.plotly_chart(fig_textblob)
-#st.plotly_chart(fig_vader)
+st.plotly_chart(fig_textblob)
+st.plotly_chart(fig_vader)'''
 
 
 
