@@ -183,7 +183,7 @@ def analyse_sentiments(dataframes, labels):
     # # #
     crises = df["topic"].dropna().unique()
     crises_lisibles = [labels.get(code, code) for code in sorted(crises)]
-    selected_label = st.selectbox("Choisissez une crise 📍", crises_lisibles)
+    selected_label = st.selectbox("Choisissez une crise: ", crises_lisibles)
     selected_crisis = label_to_code.get(selected_label, selected_label)
 
     # Filtrer les données pour la crise sélectionnée
@@ -210,7 +210,7 @@ def analyse_sentiments(dataframes, labels):
     fig_roberta.update_layout(barmode='stack')
 
     # affichage
-    st.subheader("Répartition des sentiments RoBERTa")
+    st.subheader("Répartition des sentiments pour {selected_crisis}")
 
 
 
