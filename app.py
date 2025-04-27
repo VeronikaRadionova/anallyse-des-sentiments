@@ -208,7 +208,7 @@ with col2:
 
 
 
-'''st.subheader("Timeline")
+st.subheader("Timeline")
 
     # vérification que les dates sont bien converties
 df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
@@ -239,51 +239,61 @@ fig.update_layout(
         template='plotly_white'
     )
 
-st.plotly_chart(fig, use_container_width=True)'''
+st.plotly_chart(fig, use_container_width=True)
 
 
 
 st.subheader("Timeline")
 
-# Vérification que les dates sont bien converties
+# Conversion date
 df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
 df['date'] = df['created_at'].dt.date
 
-# Mapper les labels en scores numériques
+# Mapping des sentiments
 sentiment_map = {'negative': -1, 'neutral': 0, 'positive': 1}
 df['vader_score'] = df['vader_label'].map(sentiment_map)
 
-# Moyenne quotidienne des scores
+# Moyenne quotidienne
 daily_sentiment = df.groupby('date')['vader_score'].mean().reset_index()
 
-# Affichage
+# Nouveau graphique
 fig = px.line(
     daily_sentiment,
     x='date',
     y='vader_score',
-    title='Évolution quotidienne du sentiment moyen (VADER)',
+    title='Évolution Quotidienne du Sentiment (VADER)',
     markers=True,
-    labels={'vader_score': 'Sentiment moyen', 'date': 'Date'},
-    line_shape='spline',  # Ajoute une courbe lissée
+    labels={'date': 'Date', 'vader_score': 'Sentiment Moyen'},
 )
 
-fig.update_traces(
-    marker=dict(size=6, color='royalblue', line=dict(width=1, color='DarkSlateGrey')),
-    line=dict(color='royalblue', width=3)
-)
-
+# Mise en page propre
 fig.update_layout(
-    title_x=0.5,  # Centre le titre
-    title_font=dict(size=22),
-    xaxis_title='Date',
-    yaxis_title='Sentiment moyen',
-    xaxis_tickangle=-45,
-    yaxis=dict(dtick=0.5, gridcolor='lightgrey'),
-    xaxis=dict(showgrid=True, gridcolor='lightgrey'),
-    template='plotly_white',
-    plot_bgcolor='rgba(0,0,0,0)',  # Fond transparent
+    template='simple_white',  # thème épuré
+    title_x=0.5,  # centrer le titre
+    title_font=dict(size=24, family="Arial", color="black"),
+    xaxis_title='',
+    yaxis_title='Sentiment Moyen',
+    xaxis=dict(
+        tickangle=-45,
+        tickfont=dict(size=10),
+        showgrid=True,
+        gridwidth=1,
+        gridcolor='LightGrey'
+    ),
+    yaxis=dict(
+        range=[-1, 1],
+        dtick=0.5,
+        showgrid=True,
+        gridwidth=1,
+        gridcolor='LightGrey'
+    ),
+    plot_bgcolor='white',
 )
 
+# Tracé plus épais pour la ligne
+fig.update_traces(line=dict(color='royalblue', width=3))
+
+# Affichage Streamlit
 st.plotly_chart(fig, use_container_width=True)
 
 
