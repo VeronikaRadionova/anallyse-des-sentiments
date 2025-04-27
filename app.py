@@ -126,7 +126,7 @@ df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
 
 
 # Importation du data dans le repertoire CSV
-dataframes = {'tweets_with_sentiments'}
+dataframes = {"tweets_with_sentiments"}
 labels = {
     "TRECIS-CTIT-H-001": "fireColorado2012",
     "TRECIS-CTIT-H-002": "costaRicaEarthquake2012",
