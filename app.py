@@ -51,39 +51,7 @@ def clean_text_for_sentiment(text):
     return ' '.join(words)
 
 
-
-
-'''from textblob import TextBlob
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from transformers import pipeline
-
-# TextBlob
-def analyze_textblob(text):
-    polarity = TextBlob(text).sentiment.polarity
-    if polarity > 0.05:
-        label = 'positive'
-    elif polarity < -0.05:
-        label = 'negative'
-    else:
-        label = 'neutral'
-    return polarity, label
-
-
-# VADER
-vader = SentimentIntensityAnalyzer()
-
-def analyze_vader(text):
-    scores = vader.polarity_scores(text)
-    compound = scores['compound']
-    if compound > 0.05:
-        label = 'positive'
-    elif compound < -0.05:
-        label = 'negative'
-    else:
-        label = 'neutral'
-    return compound, label'''
-
-
+# MODÈLE D'ANALYSE UTILISÉ
 roberta_sentiment = pipeline(
     "sentiment-analysis",
     model="cardiffnlp/twitter-roberta-base-sentiment"
@@ -152,51 +120,50 @@ label_to_code = {v: k for k, v in labels.items()}
 
 
 # MAIN AFFICHAGE
-
 def analyse_sentiments(dataframes, labels): 
     st.title("Analyse des Sentiments des Tweets")
 
+    # chargement de dataframe
     if "tweets_with_sentiments" not in dataframes:
         st.error("tweets_with_sentiments est manquant dans les données chargées")
         return
 
     df = pd.read_csv('tweets_with_sentiments.csv')
 
-    # # #
     crises = df["topic"].dropna().unique()
     crises_lisibles = [labels.get(code, code) for code in sorted(crises)]
     selected_label = st.selectbox("Choisissez une crise: ", crises_lisibles)
     selected_crisis = label_to_code.get(selected_label, selected_label)
 
-    # Filtrer les données pour la crise sélectionnée
+    # filtrage des données pour la crise sélectionnée
     df = df[df['topic'] == selected_crisis]
 
     # dictionnaire de couleurs pour les sentiments
     set3_colors = px.colors.qualitative.Set3
-
     color_map = {
         'positive': set3_colors[1],
         'neutral': set3_colors[0],
         'negative': set3_colors[2]
     }
 
-    # RoBERTa
+
+
+    # RÉPARTITION DES SENTIMENTS
+    st.subheader("Répartition des sentiments")
+
+    # Barplot
     roberta_counts = df['roberta_label'].value_counts().reset_index()
     roberta_counts.columns = ['Sentiment', 'Tweets']
     roberta_counts['Color'] = roberta_counts['Sentiment'].map(color_map)
 
-    fig_roberta = px.bar(roberta_counts, 
+    fig_bar = px.bar(roberta_counts, 
                         x='Sentiment', y='Tweets',
                         title=None,
                         color='Sentiment', color_discrete_map = color_map)
-    fig_roberta.update_layout(barmode='stack')
-
-    # affichage
-    st.subheader("Répartition des sentiments")
+    fig_bar.update_layout(barmode='stack')
 
 
-
-    # colonnes et titres
+    # Pie Chart
     col = 'roberta_label'
     title = ''
 
@@ -206,7 +173,6 @@ def analyse_sentiments(dataframes, labels):
 
     donut_colors = [color_map[label] for label in labels]
 
-    # Création du donut
     fig_pie = go.Figure(data=[go.Pie(
         labels=labels,
         values=values,
@@ -215,7 +181,6 @@ def analyse_sentiments(dataframes, labels):
         textinfo='percent',
     )])
 
-    # Layout
     fig_pie.update_layout(
         title=title,
         margin=dict(t=50, b=0, l=0, r=0),
@@ -225,14 +190,14 @@ def analyse_sentiments(dataframes, labels):
     col1, col2 = st.columns([2,1])
 
     with col1:
-        st.plotly_chart(fig_roberta, use_container_width=True)
+        st.plotly_chart(fig_bar, use_container_width=True)
 
     with col2:
         st.plotly_chart(fig_pie, use_container_width=True)
 
 
 
-    # EVOLUTION DANS LE TEMPS
+    # ÉVOLUTION DANS LE TEMPS
     st.subheader("Évolution des sentiments dans le temps")
 
     # vérification que les dates sont bien converties
