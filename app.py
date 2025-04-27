@@ -4,7 +4,7 @@ import re
 import plotly.express as px
 import plotly.graph_objects as go
 
-'''import nltk
+import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
@@ -51,7 +51,7 @@ def clean_text_for_sentiment(text):
 
 
 
-from textblob import TextBlob
+'''from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from transformers import pipeline
 
