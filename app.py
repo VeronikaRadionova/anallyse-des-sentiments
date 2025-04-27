@@ -208,7 +208,7 @@ with col2:
 
 
 
-st.subheader("Timeline")
+'''st.subheader("Timeline")
 
     # vérification que les dates sont bien converties
 df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
@@ -238,6 +238,51 @@ fig.update_layout(
         yaxis=dict(dtick=0.5),
         template='plotly_white'
     )
+
+st.plotly_chart(fig, use_container_width=True)'''
+
+
+
+st.subheader("Timeline")
+
+# Vérification que les dates sont bien converties
+df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
+df['date'] = df['created_at'].dt.date
+
+# Mapper les labels en scores numériques
+sentiment_map = {'negative': -1, 'neutral': 0, 'positive': 1}
+df['vader_score'] = df['vader_label'].map(sentiment_map)
+
+# Moyenne quotidienne des scores
+daily_sentiment = df.groupby('date')['vader_score'].mean().reset_index()
+
+# Affichage
+fig = px.line(
+    daily_sentiment,
+    x='date',
+    y='vader_score',
+    title='Évolution quotidienne du sentiment moyen (VADER)',
+    markers=True,
+    labels={'vader_score': 'Sentiment moyen', 'date': 'Date'},
+    line_shape='spline',  # Ajoute une courbe lissée
+)
+
+fig.update_traces(
+    marker=dict(size=6, color='royalblue', line=dict(width=1, color='DarkSlateGrey')),
+    line=dict(color='royalblue', width=3)
+)
+
+fig.update_layout(
+    title_x=0.5,  # Centre le titre
+    title_font=dict(size=22),
+    xaxis_title='Date',
+    yaxis_title='Sentiment moyen',
+    xaxis_tickangle=-45,
+    yaxis=dict(dtick=0.5, gridcolor='lightgrey'),
+    xaxis=dict(showgrid=True, gridcolor='lightgrey'),
+    template='plotly_white',
+    plot_bgcolor='rgba(0,0,0,0)',  # Fond transparent
+)
 
 st.plotly_chart(fig, use_container_width=True)
 
