@@ -186,6 +186,9 @@ def analyse_sentiments(dataframes, labels):
     selected_label = st.selectbox("Choisissez une crise 📍", crises_lisibles)
     selected_crisis = label_to_code.get(selected_label, selected_label)
 
+    # Filtrer les données pour la crise sélectionnée
+    df = df[df['topic'] == selected_crisis]
+
     # dictionnaire de couleurs pour les sentiments
     set3_colors = px.colors.qualitative.Set3
 
