@@ -121,7 +121,7 @@ label_to_code = {v: k for k, v in labels.items()}
 
 # MAIN AFFICHAGE
 def analyse_sentiments(dataframes, labels): 
-    st.title("Analyse des Sentiments des Tweets 🎭")
+    st.title("Analyse des Sentiments des Tweets🎭")
 
     # chargement de dataframe
     if "tweets_with_sentiments" not in dataframes:
@@ -149,7 +149,7 @@ def analyse_sentiments(dataframes, labels):
 
 
     # RÉPARTITION DES SENTIMENTS
-    st.subheader("Répartition des sentiments 📊")
+    st.subheader("Répartition des sentiments📊")
 
     # Barplot
     roberta_counts = df['roberta_label'].value_counts().reset_index()
