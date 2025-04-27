@@ -308,12 +308,12 @@ def analyse_sentiments(dataframes, labels):
         template='plotly_white'
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)'''
     
 
 
 
-analyse_sentiments(dataframes,labels)'''
+analyse_sentiments(dataframes,labels)
 
 
 
