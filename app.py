@@ -125,7 +125,46 @@ df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
 
 
 
+# Importation du data dans le repertoire CSV
+dataframes = {'tweets_with_sentiments'}
+labels = {
+    "TRECIS-CTIT-H-001": "fireColorado2012",
+    "TRECIS-CTIT-H-002": "costaRicaEarthquake2012",
+    "TRECIS-CTIT-H-003": "floodColorado2013",
+    "TRECIS-CTIT-H-004": "typhoonPablo2012",
+    "TRECIS-CTIT-H-005": "laAirportShooting2013",
+    "TRECIS-CTIT-H-006": "westTexasExplosion2013",
+    "TRECIS-CTIT-H-007": "guatemalaEarthquake2012",
+    "TRECIS-CTIT-H-008": "italyEarthquakes2012",
+    "TRECIS-CTIT-H-009": "philipinnesFloods2012",
+    "TRECIS-CTIT-H-010": "albertaFloods2013",
+    "TRECIS-CTIT-H-011": "australiaBushfire2013",
+    "TRECIS-CTIT-H-012": "bostonBombings2013",
+    "TRECIS-CTIT-H-013": "manilaFloods2013",
+    "TRECIS-CTIT-H-014": "queenslandFloods2013",
+    "TRECIS-CTIT-H-015": "typhoonYolanda2013",
+    "TRECIS-CTIT-H-016": "joplinTornado2011",
+    "TRECIS-CTIT-H-017": "chileEarthquake2014",
+    "TRECIS-CTIT-H-018": "typhoonHagupit2014",
+    "TRECIS-CTIT-H-019": "nepalEarthquake2015",
+    "TRECIS-CTIT-H-020": "flSchoolShooting2018",
+    "TRECIS-CTIT-H-021": "parisAttacks2015",
+    "TRECIS-CTIT-H-022": "floodChoco2019",
+    "TRECIS-CTIT-H-023": "fireAndover2019",
+    "TRECIS-CTIT-H-024": "earthquakeCalifornia2014",
+    "TRECIS-CTIT-H-025": "earthquakeBohol2013",
+    "TRECIS-CTIT-H-026": "hurricaneFlorence2018",
+    "TRECIS-CTIT-H-027": "shootingDallas2017",
+    "TRECIS-CTIT-H-028": "fireYMM2016",
+    "TRECIS-CTIT-H-029": "albertaWildfires2019",
+    "TRECIS-CTIT-H-030": "cycloneKenneth2019",
+    "TRECIS-CTIT-H-031": "philippinesEarthquake2019",
+    "TRECIS-CTIT-H-032": "coloradoStemShooting2019",
+    "TRECIS-CTIT-H-033": "southAfricaFloods2019",
+    "TRECIS-CTIT-H-034": "sandiegoSynagogueShooting2019"
+}
 
+label_to_code = {v: k for k, v in labels.items()}
 
 
 
@@ -140,6 +179,12 @@ def analyse_sentiments(dataframes, labels):
         return
 
     df = pd.read_csv('tweets_with_sentiments.csv')
+
+    # # #
+    crises = df["topic"].dropna().unique()
+    crises_lisibles = [labels.get(code, code) for code in sorted(crises)]
+    selected_label = st.selectbox("Choisissez une crise 📍", crises_lisibles)
+    selected_crisis = label_to_code.get(selected_label, selected_label)
 
     # dictionnaire de couleurs pour les sentiments
     set3_colors = px.colors.qualitative.Set3
@@ -265,7 +310,7 @@ def analyse_sentiments(dataframes, labels):
 
 
 
-
+analyse_sentiments(dataframes,labels)
 
 
 
