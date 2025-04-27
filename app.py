@@ -282,18 +282,6 @@ def analyse_sentiments(dataframes, labels):
         template='plotly_white'
     )
 
-    # annotation pour expliquer la signification
-    fig.add_annotation(
-        text="-1 = Négatif<br>0 = Neutre<br>1 = Positif",
-        xref="paper", yref="paper",
-        x=1.05, y=0.5,
-        showarrow=False,
-        align='left',
-        bgcolor='rgba(255,255,255,0.7)',
-        bordercolor='black',
-        borderwidth=1
-    )
-
     st.plotly_chart(fig, use_container_width=True)
 
 
