@@ -251,7 +251,7 @@ def analyse_sentiments(dataframes, labels):
 
 
     # EVOLUTION DANS LE TEMPS
-    st.subheader("Timeline")
+    st.subheader("Évolution des sentiments dans le temps")
 
     # vérification que les dates sont bien converties
     df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
