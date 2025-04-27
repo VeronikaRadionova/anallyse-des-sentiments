@@ -210,7 +210,7 @@ def analyse_sentiments(dataframes, labels):
     fig_roberta.update_layout(barmode='stack')
 
     # affichage
-    st.subheader("Répartition des sentiments pour {selected_crisis}")
+    st.subheader("Répartition des sentiments pour {selected_label}")
 
 
 
