@@ -9,6 +9,8 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
+from transformers import pipeline
+
 
 # téléchargement des ressources nécessaires
 nltk.download('wordnet')
@@ -79,7 +81,7 @@ def analyze_vader(text):
         label = 'negative'
     else:
         label = 'neutral'
-    return compound, label
+    return compound, label'''
 
 
 roberta_sentiment = pipeline(
@@ -102,26 +104,6 @@ def get_roberta_label(text):
             return 'unknown'
     except:
         return 'neutral'  # fallback en cas d'erreur
-
-
-# chargement du fichier CSV
-df = pd.read_csv('Tweet_clean.csv')
-df['clean_text'] = df['text'].apply(clean_text_for_sentiment)
-
-
-# analyse TextBlob
-df[['textblob_polarity', 'textblob_label']] = df['clean_text'].apply(
-    lambda x: pd.Series(analyze_textblob(x))
-)
-
-# analyse VADER
-df[['vader_compound', 'vader_label']] = df['clean_text'].apply(
-    lambda x: pd.Series(analyze_vader(x))
-)
-
-# analyse RoBERTa
-#df['roberta_label'] = df['clean_text'].apply(get_roberta_label)
-'''
 
 
 
@@ -286,67 +268,7 @@ def analyse_sentiments(dataframes, labels):
 
 
 
-
-    '''# calcul du score moyen par topic
-    topic_sentiment = df.groupby('topic')['vader_score'].mean().sort_values().reset_index()
-
-    # affichage
-    fig = px.bar(
-        topic_sentiment,
-        x='vader_score',
-        y='topic',
-        orientation='h',
-        title='Average Topic Sentiment (RoBERTa)',
-        labels={'vader_score': 'Average Sentiment', 'topic': 'Topic'},
-        color='vader_score',
-        color_continuous_scale='RdYlGn',
-    )
-
-    fig.update_layout(
-        xaxis_title='Average Sentiment',
-        yaxis_title='Topic',
-        template='plotly_white'
-    )
-
-    st.plotly_chart(fig, use_container_width=True)'''
-    
-
-
-
 analyse_sentiments(dataframes,labels)
-
-
-
-
-
-
-
-
-
-'''# TextBlob
-textblob_counts = df['textblob_label'].value_counts().reset_index()
-textblob_counts.columns = ['Sentiment', 'Tweets']
-textblob_counts['Color'] = textblob_counts['Sentiment'].map(color_map)
-
-fig_textblob = px.bar(textblob_counts, 
-                      x='Sentiment', y='Tweets',
-                      title="TextBlob Sentiment Distribution",
-                      color='Sentiment', color_discrete_map = color_map)
-fig_textblob.update_layout(barmode='stack')
-
-# VADER
-vader_counts = df['vader_label'].value_counts().reset_index()
-vader_counts.columns = ['Sentiment', 'Tweets']
-vader_counts['Color'] = vader_counts['Sentiment'].map(color_map)
-
-fig_vader = px.bar(vader_counts, 
-                   x='Sentiment', y='Tweets',
-                   title="VADER Sentiment Distribution",
-                   color='Sentiment', color_discrete_map = color_map)
-fig_vader.update_layout(barmode='stack')
-
-st.plotly_chart(fig_textblob)
-st.plotly_chart(fig_vader)'''
 
 
 
