@@ -269,7 +269,7 @@ def analyse_sentiments(dataframes, labels):
         daily_sentiment,
         x='date',
         y='vader_score',
-        title='Average Daily Sentiment (VADER)',
+        title='Average Daily Sentiment',
         markers=True,
         labels={'vader_score': 'Average Sentiment (-1=neg, 1=pos)', 'date': 'Date'},
     )
@@ -280,6 +280,18 @@ def analyse_sentiments(dataframes, labels):
         xaxis_tickangle=-45,
         yaxis=dict(dtick=0.5),
         template='plotly_white'
+    )
+
+    # annotation pour expliquer la signification
+    fig.add_annotation(
+        text="-1 = Négatif<br>0 = Neutre<br>1 = Positif",
+        xref="paper", yref="paper",
+        x=1.05, y=0.5,
+        showarrow=False,
+        align='left',
+        bgcolor='rgba(255,255,255,0.7)',
+        bordercolor='black',
+        borderwidth=1
     )
 
     st.plotly_chart(fig, use_container_width=True)
