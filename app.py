@@ -187,11 +187,10 @@ def analyse_sentiments(dataframes, labels):
         showlegend=False
     )
 
+    # affichage
     col1, col2 = st.columns([2,1])
-
     with col1:
         st.plotly_chart(fig_bar, use_container_width=True)
-
     with col2:
         st.plotly_chart(fig_pie, use_container_width=True)
 
