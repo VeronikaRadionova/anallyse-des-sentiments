@@ -121,7 +121,7 @@ label_to_code = {v: k for k, v in labels.items()}
 
 # MAIN AFFICHAGE
 def analyse_sentiments(dataframes, labels): 
-    st.title("Analyse des Sentiments des Tweets")
+    st.title("Analyse des Sentiments des Tweets 🎭")
 
     # chargement de dataframe
     if "tweets_with_sentiments" not in dataframes:
@@ -132,7 +132,7 @@ def analyse_sentiments(dataframes, labels):
 
     crises = df["topic"].dropna().unique()
     crises_lisibles = [labels.get(code, code) for code in sorted(crises)]
-    selected_label = st.selectbox("Choisissez une crise: ", crises_lisibles)
+    selected_label = st.selectbox("Choisissez une crise 📍 ", crises_lisibles)
     selected_crisis = label_to_code.get(selected_label, selected_label)
 
     # filtrage des données pour la crise sélectionnée
@@ -149,7 +149,7 @@ def analyse_sentiments(dataframes, labels):
 
 
     # RÉPARTITION DES SENTIMENTS
-    st.subheader("Répartition des sentiments")
+    st.subheader("Répartition des sentiments 📊")
 
     # Barplot
     roberta_counts = df['roberta_label'].value_counts().reset_index()
@@ -197,7 +197,7 @@ def analyse_sentiments(dataframes, labels):
 
 
     # ÉVOLUTION DANS LE TEMPS
-    st.subheader("Évolution des sentiments dans le temps")
+    st.subheader("Évolution des sentiments dans le temps ⏳")
 
     # vérification que les dates sont bien converties
     df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
