@@ -202,19 +202,19 @@ def analyse_sentiments(dataframes, labels):
 
     # mapper les labels en scores numériques
     sentiment_map = {'negative': -1, 'neutral': 0, 'positive': 1}
-    df['vader_score'] = df['vader_label'].map(sentiment_map)
+    df['roberta_score'] = df['roberta_label'].map(sentiment_map)
 
     # moyenne quotidienne des scores
-    daily_sentiment = df.groupby('date')['vader_score'].mean().reset_index()
+    daily_sentiment = df.groupby('date')['roberta_score'].mean().reset_index()
 
     # affichage
     fig = px.line(
         daily_sentiment,
         x='date',
-        y='vader_score',
+        y='roberta_score',
         title='Average Daily Sentiment',
         markers=True,
-        labels={'vader_score': 'Average Sentiment (-1=neg, 1=pos)', 'date': 'Date'},
+        labels={'roberta_score': 'Average Sentiment (-1=neg, 1=pos)', 'date': 'Date'},
     )
 
     fig.update_layout(
